@@ -52,11 +52,28 @@ namespace application
                     m.Result = (IntPtr)14; // HTBOTTOM
             }
         }
+
+        private void outputReceived(byte data)
+        {
+            output2Richtextbox.AppendText(data.ToString("X2") + " ");
+            output2Richtextbox.SelectionStart = output2Richtextbox.TextLength;
+            output2Richtextbox.ScrollToCaret();
+            this.Refresh();
+        }
+
+        private void outputSent(byte data)
+        {
+            output3Richtextbox.AppendText(data.ToString("X2") + " ");
+            output3Richtextbox.SelectionStart = output3Richtextbox.TextLength;
+            output3Richtextbox.ScrollToCaret();
+            this.Refresh();
+        }
+
         private void output(string text)
         {
             outputRichtextbox.Invoke(new Action(() =>
             {
-                outputRichtextbox.AppendText(text + Environment.NewLine);
+                outputRichtextbox.AppendText(text);
                 outputRichtextbox.SelectionStart = outputRichtextbox.TextLength;
                 outputRichtextbox.ScrollToCaret();
                 this.Refresh();
@@ -66,7 +83,7 @@ namespace application
         private void debug(string text, [CallerMemberName] string caller = "", [CallerLineNumber] int line = 0)
         {
             DateTime now = DateTime.Now;
-            output(now.ToString("yyyy-MM-ddTHH:mm:ss.fff K", CultureInfo.InvariantCulture) + $" | {caller}:{line} | " + text);
+            output(now.ToString("yyyy-MM-ddTHH:mm:ss.fff K", CultureInfo.InvariantCulture) + $" | {caller}:{line} | " + text + Environment.NewLine);
         }
 
         private void getSerialDevices()
@@ -88,8 +105,60 @@ namespace application
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
             sp = (SerialPort)sender;
-            string recvData = sp.ReadExisting();
-            debug($"RECV: {recvData}");
+            //string recvData = sp.ReadExisting();
+            int recvByte = sp.ReadByte();
+            if (recvByte == -1)
+            {
+                debug("End of stream");
+            }
+            else
+            {
+                output(((char)(byte)recvByte).ToString());
+                outputReceived((byte)recvByte);
+            }
+
+            //debug($"RECV: {recvData}");
+            updateStats();
+        }
+
+        private void updateStats()
+        {
+
+            readbuffersize.Text = $"Buffer Size: {sp.ReadBufferSize}";
+            readtimeout.Text = $"Timeout: {sp.ReadTimeout} ms";
+            bytestoread.Text = $"Bytes: {sp.BytesToRead}";
+
+            writebuffersize.Text = $"Buffer Size: {sp.WriteBufferSize}";
+            writetimeout.Text = $"Timeout: {sp.WriteTimeout} ms";
+            bytestowrite.Text = $"Bytes: {sp.BytesToWrite}";
+
+            cts.Text = $"CTS: {sp.CtsHolding}";
+            breakstate.Text = $"Break: {sp.BreakState}";
+            cdline.Text = $"CD Line: {sp.CDHolding}";
+            rts.Text = $"RTS: {sp.RtsEnable}";
+            dsr.Text = $"DSR: {sp.DsrHolding}";
+            dtr.Text = $"DTR: {sp.DtrEnable}";
+            encoding.Text = $"Encoding: {sp.Encoding.EncodingName}";
+            handshake.Text = $"Handshake: {sp.Handshake.ToString()}";
+            open.Text = $"Open: {sp.IsOpen}";
+            newline.Text = $"Newline: {sp.NewLine}";
+
+            this.Refresh();
+        }
+
+        private string getDeviceName(string portName)
+        {
+            using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_SerialPort"))
+            {
+                var ports = searcher.Get().Cast<ManagementBaseObject>().ToList();
+                var device = ports.FirstOrDefault(p => p["DeviceID"].ToString() == portName);
+
+                if (device != null)
+                {
+                    return device["Caption"]?.ToString();
+                }
+            }
+            return null;
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -146,7 +215,7 @@ namespace application
 
         private void commCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            debug($"Port selected: {commCombobox.Text}");
+            debug($"Port selected: {getDeviceName(commCombobox.Text)}");
         }
 
         private void connectButton_Click(object sender, EventArgs e)
@@ -158,6 +227,15 @@ namespace application
                 Parity parity = Parity.None;
                 int dataBits = 8;
                 StopBits stopBits = StopBits.None;
+
+                commCombobox.Enabled = false;
+                speedCombobox.Enabled = false;
+                databitsNumericUpDown.Enabled = false;
+                stopbitsNumericUpDown.Enabled = false;
+                parityCombobox.Enabled = false;
+                flowcontrolCombobox.Enabled = false;
+                outputRichtextbox.ReadOnly = false;
+                refreshButton.Enabled = false;
 
                 try { baudRate = int.Parse(speedCombobox.Text); } catch (Exception ex) { debug($"EXCEPTION: [SPEED/BAUD RATE]: {ex.Message}"); }
                 try
@@ -205,11 +283,21 @@ namespace application
                 }
 
                 sp.Open();
+
                 return;
             }
 
             if (connectButton.Text == "Disconnect")
             {
+                commCombobox.Enabled = true;
+                speedCombobox.Enabled = true;
+                databitsNumericUpDown.Enabled = true;
+                stopbitsNumericUpDown.Enabled = true;
+                parityCombobox.Enabled = true;
+                flowcontrolCombobox.Enabled = true;
+                outputRichtextbox.ReadOnly = true;
+                refreshButton.Enabled = true;
+
                 debug($"Closing serial interface: {commCombobox.Text}");
                 if (sp.IsOpen)
                 {
@@ -229,14 +317,24 @@ namespace application
         {
             if (sp.IsOpen)
             {
+                outputSent((byte)e.KeyChar);
+
                 if (e.KeyChar == '\r' || e.KeyChar == '\n')
                 {
-                    sp.Write("\r\n");
-                } else
+                    sp.Write(sp.NewLine);
+                }
+                else
                 {
                     sp.Write(e.KeyChar.ToString());
                 }
+
+                updateStats();
             }
+        }
+
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            getSerialDevices();
         }
     }
 }

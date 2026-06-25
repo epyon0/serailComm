@@ -45,6 +45,29 @@
             parityCombobox = new ComboBox();
             flowcontrolCombobox = new ComboBox();
             connectButton = new Button();
+            bytestoread = new Label();
+            readbuffersize = new Label();
+            label8 = new Label();
+            readtimeout = new Label();
+            writetimeout = new Label();
+            label9 = new Label();
+            writebuffersize = new Label();
+            bytestowrite = new Label();
+            cts = new Label();
+            breakstate = new Label();
+            cdline = new Label();
+            rts = new Label();
+            dsr = new Label();
+            dtr = new Label();
+            encoding = new Label();
+            handshake = new Label();
+            open = new Label();
+            newline = new Label();
+            output2Richtextbox = new RichTextBox();
+            output3Richtextbox = new RichTextBox();
+            label7 = new Label();
+            label10 = new Label();
+            refreshButton = new Button();
             ((System.ComponentModel.ISupportInitialize)databitsNumericUpDown).BeginInit();
             ((System.ComponentModel.ISupportInitialize)stopbitsNumericUpDown).BeginInit();
             SuspendLayout();
@@ -55,10 +78,10 @@
             outputRichtextbox.BackColor = Color.Black;
             outputRichtextbox.BorderStyle = BorderStyle.None;
             outputRichtextbox.ForeColor = Color.Lime;
-            outputRichtextbox.Location = new Point(200, 31);
+            outputRichtextbox.Location = new Point(286, 31);
             outputRichtextbox.Name = "outputRichtextbox";
             outputRichtextbox.ReadOnly = true;
-            outputRichtextbox.Size = new Size(743, 397);
+            outputRichtextbox.Size = new Size(899, 555);
             outputRichtextbox.TabIndex = 0;
             outputRichtextbox.Text = "";
             outputRichtextbox.LinkClicked += richTextBox1_LinkClicked;
@@ -71,7 +94,7 @@
             minButton.FlatStyle = FlatStyle.Flat;
             minButton.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             minButton.ForeColor = Color.Lime;
-            minButton.Location = new Point(880, 0);
+            minButton.Location = new Point(1122, 0);
             minButton.Name = "minButton";
             minButton.Size = new Size(25, 25);
             minButton.TabIndex = 1;
@@ -86,7 +109,7 @@
             maxButton.FlatStyle = FlatStyle.Flat;
             maxButton.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             maxButton.ForeColor = Color.Lime;
-            maxButton.Location = new Point(905, 0);
+            maxButton.Location = new Point(1147, 0);
             maxButton.Name = "maxButton";
             maxButton.Size = new Size(25, 25);
             maxButton.TabIndex = 2;
@@ -101,7 +124,7 @@
             closeButton.FlatStyle = FlatStyle.Flat;
             closeButton.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             closeButton.ForeColor = Color.Lime;
-            closeButton.Location = new Point(930, 0);
+            closeButton.Location = new Point(1172, 0);
             closeButton.Name = "closeButton";
             closeButton.Size = new Size(25, 25);
             closeButton.TabIndex = 3;
@@ -118,7 +141,7 @@
             commCombobox.FormattingEnabled = true;
             commCombobox.Location = new Point(114, 4);
             commCombobox.Name = "commCombobox";
-            commCombobox.Size = new Size(80, 19);
+            commCombobox.Size = new Size(71, 19);
             commCombobox.TabIndex = 4;
             commCombobox.SelectedIndexChanged += commCombobox_SelectedIndexChanged;
             // 
@@ -151,7 +174,7 @@
             speedCombobox.Items.AddRange(new object[] { "50", "75", "110", "134", "150", "200", "300", "600", "1200", "1800", "2400", "4800", "9600", "19200", "28800", "38400", "57600", "76800", "115200", "230400", "460800", "576000", "921600" });
             speedCombobox.Location = new Point(114, 29);
             speedCombobox.Name = "speedCombobox";
-            speedCombobox.Size = new Size(80, 19);
+            speedCombobox.Size = new Size(71, 19);
             speedCombobox.TabIndex = 7;
             // 
             // label3
@@ -197,7 +220,7 @@
             databitsNumericUpDown.ForeColor = Color.Lime;
             databitsNumericUpDown.Location = new Point(114, 58);
             databitsNumericUpDown.Name = "databitsNumericUpDown";
-            databitsNumericUpDown.Size = new Size(80, 14);
+            databitsNumericUpDown.Size = new Size(71, 14);
             databitsNumericUpDown.TabIndex = 12;
             databitsNumericUpDown.TextAlign = HorizontalAlignment.Right;
             databitsNumericUpDown.Value = new decimal(new int[] { 8, 0, 0, 0 });
@@ -212,7 +235,7 @@
             stopbitsNumericUpDown.Location = new Point(114, 79);
             stopbitsNumericUpDown.Maximum = new decimal(new int[] { 2, 0, 0, 0 });
             stopbitsNumericUpDown.Name = "stopbitsNumericUpDown";
-            stopbitsNumericUpDown.Size = new Size(80, 14);
+            stopbitsNumericUpDown.Size = new Size(71, 14);
             stopbitsNumericUpDown.TabIndex = 13;
             stopbitsNumericUpDown.TextAlign = HorizontalAlignment.Right;
             stopbitsNumericUpDown.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -227,7 +250,7 @@
             parityCombobox.Items.AddRange(new object[] { "None", "Odd", "Even", "Mark", "Space" });
             parityCombobox.Location = new Point(114, 104);
             parityCombobox.Name = "parityCombobox";
-            parityCombobox.Size = new Size(80, 19);
+            parityCombobox.Size = new Size(71, 19);
             parityCombobox.TabIndex = 14;
             // 
             // flowcontrolCombobox
@@ -240,7 +263,7 @@
             flowcontrolCombobox.Items.AddRange(new object[] { "None", "XON/XOFF", "RTS/CTS", "DSR/DTR" });
             flowcontrolCombobox.Location = new Point(114, 129);
             flowcontrolCombobox.Name = "flowcontrolCombobox";
-            flowcontrolCombobox.Size = new Size(80, 19);
+            flowcontrolCombobox.Size = new Size(71, 19);
             flowcontrolCombobox.TabIndex = 15;
             // 
             // connectButton
@@ -248,18 +271,260 @@
             connectButton.FlatStyle = FlatStyle.Flat;
             connectButton.Location = new Point(12, 154);
             connectButton.Name = "connectButton";
-            connectButton.Size = new Size(182, 23);
+            connectButton.Size = new Size(85, 23);
             connectButton.TabIndex = 16;
             connectButton.Text = "Connect";
             connectButton.UseVisualStyleBackColor = true;
             connectButton.Click += connectButton_Click;
+            // 
+            // bytestoread
+            // 
+            bytestoread.AutoSize = true;
+            bytestoread.Location = new Point(19, 206);
+            bytestoread.Name = "bytestoread";
+            bytestoread.Size = new Size(47, 11);
+            bytestoread.TabIndex = 17;
+            bytestoread.Text = "Bytes:";
+            // 
+            // readbuffersize
+            // 
+            readbuffersize.AutoSize = true;
+            readbuffersize.Location = new Point(19, 221);
+            readbuffersize.Name = "readbuffersize";
+            readbuffersize.Size = new Size(89, 11);
+            readbuffersize.TabIndex = 18;
+            readbuffersize.Text = "Buffer Size:";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label8.Location = new Point(12, 195);
+            label8.Name = "label8";
+            label8.Size = new Size(37, 11);
+            label8.TabIndex = 19;
+            label8.Text = "READ";
+            // 
+            // readtimeout
+            // 
+            readtimeout.AutoSize = true;
+            readtimeout.Location = new Point(19, 236);
+            readtimeout.Name = "readtimeout";
+            readtimeout.Size = new Size(61, 11);
+            readtimeout.TabIndex = 20;
+            readtimeout.Text = "Timeout:";
+            // 
+            // writetimeout
+            // 
+            writetimeout.AutoSize = true;
+            writetimeout.Location = new Point(147, 236);
+            writetimeout.Name = "writetimeout";
+            writetimeout.Size = new Size(61, 11);
+            writetimeout.TabIndex = 24;
+            writetimeout.Text = "Timeout:";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label9.Location = new Point(140, 195);
+            label9.Name = "label9";
+            label9.Size = new Size(45, 11);
+            label9.TabIndex = 23;
+            label9.Text = "WRITE";
+            // 
+            // writebuffersize
+            // 
+            writebuffersize.AutoSize = true;
+            writebuffersize.Location = new Point(147, 221);
+            writebuffersize.Name = "writebuffersize";
+            writebuffersize.Size = new Size(89, 11);
+            writebuffersize.TabIndex = 22;
+            writebuffersize.Text = "Buffer Size:";
+            // 
+            // bytestowrite
+            // 
+            bytestowrite.AutoSize = true;
+            bytestowrite.Location = new Point(147, 206);
+            bytestowrite.Name = "bytestowrite";
+            bytestowrite.Size = new Size(47, 11);
+            bytestowrite.TabIndex = 21;
+            bytestowrite.Text = "Bytes:";
+            // 
+            // cts
+            // 
+            cts.AutoSize = true;
+            cts.Location = new Point(191, 76);
+            cts.Name = "cts";
+            cts.Size = new Size(33, 11);
+            cts.TabIndex = 25;
+            cts.Text = "CTS:";
+            // 
+            // breakstate
+            // 
+            breakstate.AutoSize = true;
+            breakstate.Location = new Point(191, 95);
+            breakstate.Name = "breakstate";
+            breakstate.Size = new Size(47, 11);
+            breakstate.TabIndex = 26;
+            breakstate.Text = "Break:";
+            // 
+            // cdline
+            // 
+            cdline.AutoSize = true;
+            cdline.Location = new Point(191, 114);
+            cdline.Name = "cdline";
+            cdline.Size = new Size(61, 11);
+            cdline.TabIndex = 27;
+            cdline.Text = "CD Line:";
+            // 
+            // rts
+            // 
+            rts.AutoSize = true;
+            rts.Location = new Point(191, 133);
+            rts.Name = "rts";
+            rts.Size = new Size(33, 11);
+            rts.TabIndex = 28;
+            rts.Text = "RTS:";
+            // 
+            // dsr
+            // 
+            dsr.AutoSize = true;
+            dsr.Location = new Point(191, 152);
+            dsr.Name = "dsr";
+            dsr.Size = new Size(33, 11);
+            dsr.TabIndex = 29;
+            dsr.Text = "DSR:";
+            // 
+            // dtr
+            // 
+            dtr.AutoSize = true;
+            dtr.Location = new Point(191, 171);
+            dtr.Name = "dtr";
+            dtr.Size = new Size(33, 11);
+            dtr.TabIndex = 30;
+            dtr.Text = "DTR:";
+            // 
+            // encoding
+            // 
+            encoding.AutoSize = true;
+            encoding.Location = new Point(191, 0);
+            encoding.Name = "encoding";
+            encoding.Size = new Size(68, 11);
+            encoding.TabIndex = 31;
+            encoding.Text = "Encoding:";
+            // 
+            // handshake
+            // 
+            handshake.AutoSize = true;
+            handshake.Location = new Point(191, 19);
+            handshake.Name = "handshake";
+            handshake.Size = new Size(75, 11);
+            handshake.TabIndex = 32;
+            handshake.Text = "Handshake:";
+            // 
+            // open
+            // 
+            open.AutoSize = true;
+            open.Location = new Point(191, 38);
+            open.Name = "open";
+            open.Size = new Size(40, 11);
+            open.TabIndex = 33;
+            open.Text = "Open:";
+            // 
+            // newline
+            // 
+            newline.AutoSize = true;
+            newline.Location = new Point(191, 57);
+            newline.Name = "newline";
+            newline.Size = new Size(61, 11);
+            newline.TabIndex = 34;
+            newline.Text = "Newline:";
+            // 
+            // output2Richtextbox
+            // 
+            output2Richtextbox.BackColor = Color.Black;
+            output2Richtextbox.BorderStyle = BorderStyle.None;
+            output2Richtextbox.ForeColor = Color.Lime;
+            output2Richtextbox.Location = new Point(12, 261);
+            output2Richtextbox.Name = "output2Richtextbox";
+            output2Richtextbox.ReadOnly = true;
+            output2Richtextbox.Size = new Size(268, 155);
+            output2Richtextbox.TabIndex = 35;
+            output2Richtextbox.Text = "";
+            // 
+            // output3Richtextbox
+            // 
+            output3Richtextbox.BackColor = Color.Black;
+            output3Richtextbox.BorderStyle = BorderStyle.None;
+            output3Richtextbox.ForeColor = Color.Lime;
+            output3Richtextbox.Location = new Point(12, 433);
+            output3Richtextbox.Name = "output3Richtextbox";
+            output3Richtextbox.ReadOnly = true;
+            output3Richtextbox.Size = new Size(268, 155);
+            output3Richtextbox.TabIndex = 36;
+            output3Richtextbox.Text = "";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label7.Location = new Point(12, 247);
+            label7.Name = "label7";
+            label7.Size = new Size(29, 11);
+            label7.TabIndex = 37;
+            label7.Text = "RX:";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label10.Location = new Point(12, 419);
+            label10.Name = "label10";
+            label10.Size = new Size(29, 11);
+            label10.TabIndex = 38;
+            label10.Text = "TX:";
+            // 
+            // refreshButton
+            // 
+            refreshButton.FlatStyle = FlatStyle.Flat;
+            refreshButton.Location = new Point(100, 154);
+            refreshButton.Name = "refreshButton";
+            refreshButton.Size = new Size(85, 23);
+            refreshButton.TabIndex = 39;
+            refreshButton.Text = "Refresh";
+            refreshButton.UseVisualStyleBackColor = true;
+            refreshButton.Click += refreshButton_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 11F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
-            ClientSize = new Size(955, 440);
+            ClientSize = new Size(1197, 598);
+            Controls.Add(refreshButton);
+            Controls.Add(label10);
+            Controls.Add(label7);
+            Controls.Add(output3Richtextbox);
+            Controls.Add(output2Richtextbox);
+            Controls.Add(newline);
+            Controls.Add(open);
+            Controls.Add(handshake);
+            Controls.Add(encoding);
+            Controls.Add(dtr);
+            Controls.Add(dsr);
+            Controls.Add(rts);
+            Controls.Add(cdline);
+            Controls.Add(breakstate);
+            Controls.Add(cts);
+            Controls.Add(writetimeout);
+            Controls.Add(label9);
+            Controls.Add(writebuffersize);
+            Controls.Add(bytestowrite);
+            Controls.Add(readtimeout);
+            Controls.Add(label8);
+            Controls.Add(readbuffersize);
+            Controls.Add(bytestoread);
             Controls.Add(connectButton);
             Controls.Add(flowcontrolCombobox);
             Controls.Add(parityCombobox);
@@ -311,5 +576,28 @@
         private ComboBox parityCombobox;
         private ComboBox flowcontrolCombobox;
         private Button connectButton;
+        private Label bytestoread;
+        private Label readbuffersize;
+        private Label label8;
+        private Label readtimeout;
+        private Label writetimeout;
+        private Label label9;
+        private Label writebuffersize;
+        private Label bytestowrite;
+        private Label cts;
+        private Label breakstate;
+        private Label cdline;
+        private Label rts;
+        private Label dsr;
+        private Label dtr;
+        private Label encoding;
+        private Label handshake;
+        private Label open;
+        private Label newline;
+        private RichTextBox output2Richtextbox;
+        private RichTextBox output3Richtextbox;
+        private Label label7;
+        private Label label10;
+        private Button refreshButton;
     }
 }
