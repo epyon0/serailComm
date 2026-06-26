@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             outputRichtextbox = new RichTextBox();
             minButton = new Button();
             maxButton = new Button();
@@ -63,11 +64,13 @@
             handshake = new Label();
             open = new Label();
             newline = new Label();
-            output2Richtextbox = new RichTextBox();
-            output3Richtextbox = new RichTextBox();
-            label7 = new Label();
-            label10 = new Label();
             refreshButton = new Button();
+            timeLabel = new Label();
+            timer1 = new System.Windows.Forms.Timer(components);
+            txRichtextbox = new RichTextBox();
+            label7 = new Label();
+            rxRichtextbox = new RichTextBox();
+            label10 = new Label();
             ((System.ComponentModel.ISupportInitialize)databitsNumericUpDown).BeginInit();
             ((System.ComponentModel.ISupportInitialize)stopbitsNumericUpDown).BeginInit();
             SuspendLayout();
@@ -78,13 +81,16 @@
             outputRichtextbox.BackColor = Color.Black;
             outputRichtextbox.BorderStyle = BorderStyle.None;
             outputRichtextbox.ForeColor = Color.Lime;
-            outputRichtextbox.Location = new Point(286, 31);
+            outputRichtextbox.HideSelection = false;
+            outputRichtextbox.Location = new Point(12, 154);
             outputRichtextbox.Name = "outputRichtextbox";
             outputRichtextbox.ReadOnly = true;
-            outputRichtextbox.Size = new Size(899, 555);
+            outputRichtextbox.Size = new Size(1173, 514);
             outputRichtextbox.TabIndex = 0;
             outputRichtextbox.Text = "";
             outputRichtextbox.LinkClicked += richTextBox1_LinkClicked;
+            outputRichtextbox.Click += outputRichtextbox_Click;
+            outputRichtextbox.KeyDown += outputRichtextbox_KeyDown;
             outputRichtextbox.KeyPress += outputRichtextbox_KeyPress;
             // 
             // minButton
@@ -269,7 +275,7 @@
             // connectButton
             // 
             connectButton.FlatStyle = FlatStyle.Flat;
-            connectButton.Location = new Point(12, 154);
+            connectButton.Location = new Point(191, 100);
             connectButton.Name = "connectButton";
             connectButton.Size = new Size(85, 23);
             connectButton.TabIndex = 16;
@@ -280,7 +286,7 @@
             // bytestoread
             // 
             bytestoread.AutoSize = true;
-            bytestoread.Location = new Point(19, 206);
+            bytestoread.Location = new Point(465, 19);
             bytestoread.Name = "bytestoread";
             bytestoread.Size = new Size(47, 11);
             bytestoread.TabIndex = 17;
@@ -289,7 +295,7 @@
             // readbuffersize
             // 
             readbuffersize.AutoSize = true;
-            readbuffersize.Location = new Point(19, 221);
+            readbuffersize.Location = new Point(465, 37);
             readbuffersize.Name = "readbuffersize";
             readbuffersize.Size = new Size(89, 11);
             readbuffersize.TabIndex = 18;
@@ -299,7 +305,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(12, 195);
+            label8.Location = new Point(465, 0);
             label8.Name = "label8";
             label8.Size = new Size(37, 11);
             label8.TabIndex = 19;
@@ -308,7 +314,7 @@
             // readtimeout
             // 
             readtimeout.AutoSize = true;
-            readtimeout.Location = new Point(19, 236);
+            readtimeout.Location = new Point(465, 57);
             readtimeout.Name = "readtimeout";
             readtimeout.Size = new Size(61, 11);
             readtimeout.TabIndex = 20;
@@ -317,7 +323,7 @@
             // writetimeout
             // 
             writetimeout.AutoSize = true;
-            writetimeout.Location = new Point(147, 236);
+            writetimeout.Location = new Point(593, 57);
             writetimeout.Name = "writetimeout";
             writetimeout.Size = new Size(61, 11);
             writetimeout.TabIndex = 24;
@@ -327,7 +333,7 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label9.Location = new Point(140, 195);
+            label9.Location = new Point(593, 0);
             label9.Name = "label9";
             label9.Size = new Size(45, 11);
             label9.TabIndex = 23;
@@ -336,7 +342,7 @@
             // writebuffersize
             // 
             writebuffersize.AutoSize = true;
-            writebuffersize.Location = new Point(147, 221);
+            writebuffersize.Location = new Point(593, 37);
             writebuffersize.Name = "writebuffersize";
             writebuffersize.Size = new Size(89, 11);
             writebuffersize.TabIndex = 22;
@@ -345,11 +351,12 @@
             // bytestowrite
             // 
             bytestowrite.AutoSize = true;
-            bytestowrite.Location = new Point(147, 206);
+            bytestowrite.Location = new Point(593, 19);
             bytestowrite.Name = "bytestowrite";
             bytestowrite.Size = new Size(47, 11);
             bytestowrite.TabIndex = 21;
             bytestowrite.Text = "Bytes:";
+            bytestowrite.Click += bytestowrite_Click;
             // 
             // cts
             // 
@@ -363,7 +370,7 @@
             // breakstate
             // 
             breakstate.AutoSize = true;
-            breakstate.Location = new Point(191, 95);
+            breakstate.Location = new Point(342, 0);
             breakstate.Name = "breakstate";
             breakstate.Size = new Size(47, 11);
             breakstate.TabIndex = 26;
@@ -372,7 +379,7 @@
             // cdline
             // 
             cdline.AutoSize = true;
-            cdline.Location = new Point(191, 114);
+            cdline.Location = new Point(342, 19);
             cdline.Name = "cdline";
             cdline.Size = new Size(61, 11);
             cdline.TabIndex = 27;
@@ -381,7 +388,7 @@
             // rts
             // 
             rts.AutoSize = true;
-            rts.Location = new Point(191, 133);
+            rts.Location = new Point(342, 38);
             rts.Name = "rts";
             rts.Size = new Size(33, 11);
             rts.TabIndex = 28;
@@ -390,7 +397,7 @@
             // dsr
             // 
             dsr.AutoSize = true;
-            dsr.Location = new Point(191, 152);
+            dsr.Location = new Point(342, 57);
             dsr.Name = "dsr";
             dsr.Size = new Size(33, 11);
             dsr.TabIndex = 29;
@@ -399,7 +406,7 @@
             // dtr
             // 
             dtr.AutoSize = true;
-            dtr.Location = new Point(191, 171);
+            dtr.Location = new Point(342, 76);
             dtr.Name = "dtr";
             dtr.Size = new Size(33, 11);
             dtr.TabIndex = 30;
@@ -441,54 +448,10 @@
             newline.TabIndex = 34;
             newline.Text = "Newline:";
             // 
-            // output2Richtextbox
-            // 
-            output2Richtextbox.BackColor = Color.Black;
-            output2Richtextbox.BorderStyle = BorderStyle.None;
-            output2Richtextbox.ForeColor = Color.Lime;
-            output2Richtextbox.Location = new Point(12, 261);
-            output2Richtextbox.Name = "output2Richtextbox";
-            output2Richtextbox.ReadOnly = true;
-            output2Richtextbox.Size = new Size(268, 155);
-            output2Richtextbox.TabIndex = 35;
-            output2Richtextbox.Text = "";
-            // 
-            // output3Richtextbox
-            // 
-            output3Richtextbox.BackColor = Color.Black;
-            output3Richtextbox.BorderStyle = BorderStyle.None;
-            output3Richtextbox.ForeColor = Color.Lime;
-            output3Richtextbox.Location = new Point(12, 433);
-            output3Richtextbox.Name = "output3Richtextbox";
-            output3Richtextbox.ReadOnly = true;
-            output3Richtextbox.Size = new Size(268, 155);
-            output3Richtextbox.TabIndex = 36;
-            output3Richtextbox.Text = "";
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label7.Location = new Point(12, 247);
-            label7.Name = "label7";
-            label7.Size = new Size(29, 11);
-            label7.TabIndex = 37;
-            label7.Text = "RX:";
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label10.Location = new Point(12, 419);
-            label10.Name = "label10";
-            label10.Size = new Size(29, 11);
-            label10.TabIndex = 38;
-            label10.Text = "TX:";
-            // 
             // refreshButton
             // 
             refreshButton.FlatStyle = FlatStyle.Flat;
-            refreshButton.Location = new Point(100, 154);
+            refreshButton.Location = new Point(191, 125);
             refreshButton.Name = "refreshButton";
             refreshButton.Size = new Size(85, 23);
             refreshButton.TabIndex = 39;
@@ -496,17 +459,86 @@
             refreshButton.UseVisualStyleBackColor = true;
             refreshButton.Click += refreshButton_Click;
             // 
+            // timeLabel
+            // 
+            timeLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            timeLabel.AutoSize = true;
+            timeLabel.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            timeLabel.Location = new Point(911, 0);
+            timeLabel.Name = "timeLabel";
+            timeLabel.Size = new Size(37, 11);
+            timeLabel.TabIndex = 40;
+            timeLabel.Text = "TIME";
+            // 
+            // timer1
+            // 
+            timer1.Enabled = true;
+            timer1.Interval = 1000;
+            timer1.Tick += timer1_Tick;
+            // 
+            // txRichtextbox
+            // 
+            txRichtextbox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txRichtextbox.BackColor = Color.Black;
+            txRichtextbox.BorderStyle = BorderStyle.None;
+            txRichtextbox.ForeColor = Color.Lime;
+            txRichtextbox.HideSelection = false;
+            txRichtextbox.Location = new Point(717, 38);
+            txRichtextbox.Name = "txRichtextbox";
+            txRichtextbox.ReadOnly = true;
+            txRichtextbox.Size = new Size(231, 110);
+            txRichtextbox.TabIndex = 41;
+            txRichtextbox.Text = "";
+            // 
+            // label7
+            // 
+            label7.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label7.AutoSize = true;
+            label7.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label7.Location = new Point(717, 24);
+            label7.Name = "label7";
+            label7.Size = new Size(29, 11);
+            label7.TabIndex = 42;
+            label7.Text = "TX:";
+            // 
+            // rxRichtextbox
+            // 
+            rxRichtextbox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            rxRichtextbox.BackColor = Color.Black;
+            rxRichtextbox.BorderStyle = BorderStyle.None;
+            rxRichtextbox.ForeColor = Color.Lime;
+            rxRichtextbox.HideSelection = false;
+            rxRichtextbox.Location = new Point(954, 38);
+            rxRichtextbox.Name = "rxRichtextbox";
+            rxRichtextbox.ReadOnly = true;
+            rxRichtextbox.Size = new Size(231, 110);
+            rxRichtextbox.TabIndex = 43;
+            rxRichtextbox.Text = "";
+            // 
+            // label10
+            // 
+            label10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label10.AutoSize = true;
+            label10.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label10.Location = new Point(954, 24);
+            label10.Name = "label10";
+            label10.Size = new Size(29, 11);
+            label10.TabIndex = 44;
+            label10.Text = "RX:";
+            label10.Click += label10_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 11F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
-            ClientSize = new Size(1197, 598);
-            Controls.Add(refreshButton);
+            ClientSize = new Size(1197, 680);
             Controls.Add(label10);
+            Controls.Add(rxRichtextbox);
             Controls.Add(label7);
-            Controls.Add(output3Richtextbox);
-            Controls.Add(output2Richtextbox);
+            Controls.Add(txRichtextbox);
+            Controls.Add(timeLabel);
+            Controls.Add(refreshButton);
             Controls.Add(newline);
             Controls.Add(open);
             Controls.Add(handshake);
@@ -594,10 +626,12 @@
         private Label handshake;
         private Label open;
         private Label newline;
-        private RichTextBox output2Richtextbox;
-        private RichTextBox output3Richtextbox;
-        private Label label7;
-        private Label label10;
         private Button refreshButton;
+        private Label timeLabel;
+        private System.Windows.Forms.Timer timer1;
+        private RichTextBox txRichtextbox;
+        private Label label7;
+        private RichTextBox rxRichtextbox;
+        private Label label10;
     }
 }

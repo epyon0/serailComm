@@ -53,29 +53,11 @@ namespace application
             }
         }
 
-        private void outputReceived(byte data)
-        {
-            output2Richtextbox.AppendText(data.ToString("X2") + " ");
-            output2Richtextbox.SelectionStart = output2Richtextbox.TextLength;
-            output2Richtextbox.ScrollToCaret();
-            this.Refresh();
-        }
-
-        private void outputSent(byte data)
-        {
-            output3Richtextbox.AppendText(data.ToString("X2") + " ");
-            output3Richtextbox.SelectionStart = output3Richtextbox.TextLength;
-            output3Richtextbox.ScrollToCaret();
-            this.Refresh();
-        }
-
         private void output(string text)
         {
             outputRichtextbox.Invoke(new Action(() =>
             {
                 outputRichtextbox.AppendText(text);
-                outputRichtextbox.SelectionStart = outputRichtextbox.TextLength;
-                outputRichtextbox.ScrollToCaret();
                 this.Refresh();
             }));
         }
@@ -102,48 +84,70 @@ namespace application
             }
         }
 
-        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        private async Task DataReceivedAsyncHandler()
         {
-            sp = (SerialPort)sender;
-            //string recvData = sp.ReadExisting();
-            int recvByte = sp.ReadByte();
-            if (recvByte == -1)
-            {
-                debug("End of stream");
-            }
-            else
-            {
-                output(((char)(byte)recvByte).ToString());
-                outputReceived((byte)recvByte);
-            }
+            List<byte> buffer = new List<byte>();
+            byte[] readBuffer = new byte[4096];
 
-            //debug($"RECV: {recvData}");
-            updateStats();
+            while (sp.IsOpen)
+            {
+                try
+                {
+                    int bytesRead = await sp.BaseStream.ReadAsync(readBuffer, 0, readBuffer.Length);
+                    if (bytesRead > 0)
+                    {
+                        for (int i = 0; i < bytesRead; i++)
+                        {
+                            buffer.Add(readBuffer[i]);
+
+                            while (buffer.Contains((byte)'\n'))
+                            {
+                                int index = buffer.IndexOf((byte)'\n');
+                                byte[] messageBytes = buffer.Take(index).ToArray();
+                                buffer.RemoveRange(0, index + 1);
+
+                                Task.Run(() =>
+                                {
+                                    rxRichtextbox.Invoke(new Action(() => rxRichtextbox.AppendText(BitConverter.ToString(messageBytes).Replace('-', ' ') + " ")));
+                                    output(System.Text.Encoding.UTF8.GetString(messageBytes));
+                                });
+                            }
+                        }
+                    }
+                }
+                catch (IOException)
+                {
+                    debug($"EXCEPTION: IO Exception, port closed or error");
+                    break;
+                }
+            }
         }
 
         private void updateStats()
         {
+            if (sp.IsOpen)
+            {
+                readbuffersize.Invoke(new Action(() => readbuffersize.Text = $"Buffer Size: {sp.ReadBufferSize}"));
+                readtimeout.Invoke(new Action(() => readtimeout.Text = $"Timeout: {sp.ReadTimeout} ms"));
+                bytestoread.Invoke(new Action(() => bytestoread.Text = $"Bytes: {sp.BytesToRead}"));
 
-            readbuffersize.Text = $"Buffer Size: {sp.ReadBufferSize}";
-            readtimeout.Text = $"Timeout: {sp.ReadTimeout} ms";
-            bytestoread.Text = $"Bytes: {sp.BytesToRead}";
+                writebuffersize.Invoke(new Action(() => writebuffersize.Text = $"Buffer Size: {sp.WriteBufferSize}"));
+                writetimeout.Invoke(new Action(() => writetimeout.Text = $"Timeout: {sp.WriteTimeout} ms"));
+                bytestowrite.Invoke(new Action(() => bytestowrite.Text = $"Bytes: {sp.BytesToWrite}"));
 
-            writebuffersize.Text = $"Buffer Size: {sp.WriteBufferSize}";
-            writetimeout.Text = $"Timeout: {sp.WriteTimeout} ms";
-            bytestowrite.Text = $"Bytes: {sp.BytesToWrite}";
+                cts.Invoke(new Action(() => cts.Text = $"CTS: {sp.CtsHolding}"));
+                breakstate.Invoke(new Action(() => breakstate.Text = $"Break: {sp.BreakState}"));
+                cdline.Invoke(new Action(() => cdline.Text = $"CD Line: {sp.CDHolding}"));
+                rts.Invoke(new Action(() => rts.Text = $"RTS: {sp.RtsEnable}"));
+                dsr.Invoke(new Action(() => dsr.Text = $"DSR: {sp.DsrHolding}"));
+                dtr.Invoke(new Action(() => dtr.Text = $"DTR: {sp.DtrEnable}"));
+                encoding.Invoke(new Action(() => encoding.Text = $"Encoding: {sp.Encoding.EncodingName}"));
+                handshake.Invoke(new Action(() => handshake.Text = $"Handshake: {sp.Handshake.ToString()}"));
+                open.Invoke(new Action(() => open.Text = $"Open: {sp.IsOpen}"));
+                newline.Invoke(new Action(() => newline.Text = $"Newline: {sp.NewLine}"));
 
-            cts.Text = $"CTS: {sp.CtsHolding}";
-            breakstate.Text = $"Break: {sp.BreakState}";
-            cdline.Text = $"CD Line: {sp.CDHolding}";
-            rts.Text = $"RTS: {sp.RtsEnable}";
-            dsr.Text = $"DSR: {sp.DsrHolding}";
-            dtr.Text = $"DTR: {sp.DtrEnable}";
-            encoding.Text = $"Encoding: {sp.Encoding.EncodingName}";
-            handshake.Text = $"Handshake: {sp.Handshake.ToString()}";
-            open.Text = $"Open: {sp.IsOpen}";
-            newline.Text = $"Newline: {sp.NewLine}";
-
-            this.Refresh();
+                this.Invoke(new Action(() => this.Refresh()));
+            }
         }
 
         private string getDeviceName(string portName)
@@ -215,7 +219,8 @@ namespace application
 
         private void commCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            debug($"Port selected: {getDeviceName(commCombobox.Text)}");
+            debug($"Port selected: [{commCombobox.Text}] {getDeviceName(commCombobox.Text)}");
+            updateStats();
         }
 
         private void connectButton_Click(object sender, EventArgs e)
@@ -273,7 +278,6 @@ namespace application
                 catch (Exception ex) { debug($"EXCEPTION: [STOP BITS]: {ex.Message}"); }
 
                 sp = new SerialPort(device, baudRate, parity, dataBits, stopBits);
-                sp.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 debug($"Opening serial interface: {device}");
                 connectButton.Text = "Disconnect";
                 if (sp.IsOpen)
@@ -283,7 +287,8 @@ namespace application
                 }
 
                 sp.Open();
-
+                _ = DataReceivedAsyncHandler();
+                updateStats();
                 return;
             }
 
@@ -309,6 +314,7 @@ namespace application
                 }
 
                 connectButton.Text = "Connect";
+                updateStats();
                 return;
             }
         }
@@ -317,17 +323,8 @@ namespace application
         {
             if (sp.IsOpen)
             {
-                outputSent((byte)e.KeyChar);
-
-                if (e.KeyChar == '\r' || e.KeyChar == '\n')
-                {
-                    sp.Write(sp.NewLine);
-                }
-                else
-                {
-                    sp.Write(e.KeyChar.ToString());
-                }
-
+                txRichtextbox.AppendText(((int)e.KeyChar).ToString("X2") + " ");
+                sp.Write(e.KeyChar.ToString());
                 updateStats();
             }
         }
@@ -335,6 +332,43 @@ namespace application
         private void refreshButton_Click(object sender, EventArgs e)
         {
             getSerialDevices();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timeLabel.Invoke(new Action(() => timeLabel.Text = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt")));
+        }
+
+        private void outputRichtextbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Up || e.KeyData == Keys.Down || e.KeyData == Keys.Left || e.KeyData == Keys.Right || e.KeyData == Keys.Home)
+            {
+                outputRichtextbox.Invoke(new Action(() =>
+                {
+                    outputRichtextbox.Select(outputRichtextbox.TextLength, 0);
+                    outputRichtextbox.ScrollToCaret();
+                    e.Handled = true;
+                }));
+            }
+        }
+
+        private void outputRichtextbox_Click(object sender, EventArgs e)
+        {
+            outputRichtextbox.Invoke(new Action(() =>
+            {
+                outputRichtextbox.Select(outputRichtextbox.TextLength, 0);
+                outputRichtextbox.ScrollToCaret();
+            }));
+        }
+
+        private void bytestowrite_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
