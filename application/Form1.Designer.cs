@@ -477,7 +477,7 @@
             // 
             // txRichtextbox
             // 
-            txRichtextbox.Anchor = AnchorStyles.Top;
+            txRichtextbox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txRichtextbox.BackColor = Color.Black;
             txRichtextbox.BorderStyle = BorderStyle.None;
             txRichtextbox.ForeColor = Color.Lime;
@@ -491,7 +491,7 @@
             // 
             // label7
             // 
-            label7.Anchor = AnchorStyles.Top;
+            label7.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label7.AutoSize = true;
             label7.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label7.Location = new Point(717, 24);
@@ -502,7 +502,7 @@
             // 
             // rxRichtextbox
             // 
-            rxRichtextbox.Anchor = AnchorStyles.Top;
+            rxRichtextbox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             rxRichtextbox.BackColor = Color.Black;
             rxRichtextbox.BorderStyle = BorderStyle.None;
             rxRichtextbox.ForeColor = Color.Lime;
@@ -516,7 +516,7 @@
             // 
             // label10
             // 
-            label10.Anchor = AnchorStyles.Top;
+            label10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label10.AutoSize = true;
             label10.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label10.Location = new Point(954, 24);
