@@ -356,7 +356,6 @@
             bytestowrite.Size = new Size(47, 11);
             bytestowrite.TabIndex = 21;
             bytestowrite.Text = "Bytes:";
-            bytestowrite.Click += bytestowrite_Click;
             // 
             // cts
             // 
@@ -478,7 +477,7 @@
             // 
             // txRichtextbox
             // 
-            txRichtextbox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txRichtextbox.Anchor = AnchorStyles.Top;
             txRichtextbox.BackColor = Color.Black;
             txRichtextbox.BorderStyle = BorderStyle.None;
             txRichtextbox.ForeColor = Color.Lime;
@@ -492,7 +491,7 @@
             // 
             // label7
             // 
-            label7.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label7.Anchor = AnchorStyles.Top;
             label7.AutoSize = true;
             label7.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label7.Location = new Point(717, 24);
@@ -503,7 +502,7 @@
             // 
             // rxRichtextbox
             // 
-            rxRichtextbox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            rxRichtextbox.Anchor = AnchorStyles.Top;
             rxRichtextbox.BackColor = Color.Black;
             rxRichtextbox.BorderStyle = BorderStyle.None;
             rxRichtextbox.ForeColor = Color.Lime;
@@ -517,7 +516,7 @@
             // 
             // label10
             // 
-            label10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label10.Anchor = AnchorStyles.Top;
             label10.AutoSize = true;
             label10.Font = new Font("Lucida Console", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label10.Location = new Point(954, 24);
@@ -525,7 +524,6 @@
             label10.Size = new Size(29, 11);
             label10.TabIndex = 44;
             label10.Text = "RX:";
-            label10.Click += label10_Click;
             // 
             // Form1
             // 

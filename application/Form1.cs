@@ -144,7 +144,21 @@ namespace application
                 encoding.Invoke(new Action(() => encoding.Text = $"Encoding: {sp.Encoding.EncodingName}"));
                 handshake.Invoke(new Action(() => handshake.Text = $"Handshake: {sp.Handshake.ToString()}"));
                 open.Invoke(new Action(() => open.Text = $"Open: {sp.IsOpen}"));
-                newline.Invoke(new Action(() => newline.Text = $"Newline: {sp.NewLine}"));
+                newline.Invoke(new Action(() =>
+                {
+                    switch (sp.NewLine)
+                    {
+                        case "\n":
+                            newline.Text = $"Newline: \\n";
+                            break;
+                        case "\r":
+                            newline.Text = $"Newline: \\r";
+                            break;
+                        default:
+                            newline.Text = $"Newline: {sp.NewLine}";
+                            break;
+                    }
+                }));
 
                 this.Invoke(new Action(() => this.Refresh()));
             }
@@ -359,16 +373,6 @@ namespace application
                 outputRichtextbox.Select(outputRichtextbox.TextLength, 0);
                 outputRichtextbox.ScrollToCaret();
             }));
-        }
-
-        private void bytestowrite_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label10_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
